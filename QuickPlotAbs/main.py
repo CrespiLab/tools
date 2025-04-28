@@ -15,6 +15,8 @@ import matplotlib.gridspec as gridspec
 from scipy.optimize import curve_fit
 import numpy as np
 
+default_wl = 375
+
 def exp_decay(x, a, b, c):
     return a * np.exp(-b * x) + c
 
@@ -36,47 +38,55 @@ def read_ascii_files_as_dict(folder_path):
 
     return data_dict
 
-def plot_overlay_spectra(data_dict, snapshot_x):
+def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
     fig = plt.figure(figsize=(14, 6))
     gs = gridspec.GridSpec(1, 2, width_ratios=[3, 1])  # Wider spectra plot
 
     # First subplot: overlay spectra
     ax0 = fig.add_subplot(gs[0])
+    ax0.set_title(f"Overlayed Spectra from: {folder}")
+    
     num_files = len(data_dict)
     color_map = cm.get_cmap('viridis', num_files)
 
-    snapshot_values = []  # List of (index, Y_at_snapshot_x)
+    Abs_values = []  # List of (index, Y_at_wavelength)
 
     for idx, (filename, df) in enumerate(sorted(data_dict.items())):
         color = color_map(idx)
         ax0.plot(df['X'], df['Y'], label=filename, color=color, linewidth=1.5)
 
-        # Find nearest Y-value to snapshot_x
-        nearest_idx = (df['X'] - snapshot_x).abs().idxmin()
+        # Find nearest Y-value to wavelength
+        nearest_idx = (df['X'] - wavelength).abs().idxmin()
         y_value = df.loc[nearest_idx, 'Y']
-        snapshot_values.append((idx, y_value))  # Save index and Y
+        Abs_values.append((idx, y_value))  # Save index and Y
     
     # dashed vertical line
-    ax0.axvline(x=snapshot_x, color='gray', linestyle='--', linewidth=1.5, label=f'Snapshot X={snapshot_x}')
-
-    ax0.set_title("Overlayed Spectra")
+    # ax0.axvline(x=wavelength, color='gray', linestyle='--', linewidth=1.5, label=f'X={wavelength}')
+    ax0.axvline(x=wavelength, color='gray', linestyle='--', linewidth=1.5)
+    
     ax0.set_xlabel("X")
     ax0.set_ylabel("Y")
     ax0.grid(True, linestyle='--', alpha=0.5)
-    ax0.legend(loc='best', fontsize='small')
+    
+    if legend_on == "on":
+        ax0.legend(loc='best', fontsize='small')
+    elif legend_on == "off":
+        pass
 
     # Second subplot: scatter plot (index vs Y-value)
     ax1 = fig.add_subplot(gs[1])
-    indices, y_values = zip(*snapshot_values)
+    ax1.set_title('Scatter Plot')
+    
+    indices, y_values = zip(*Abs_values)
     colors = [color_map(idx) for idx in indices]
 
     ax1.scatter(indices, y_values, color=colors, s=50)
     ax1.set_xlabel('Spectrum Index')
-    ax1.set_ylabel(f'Y at X = {snapshot_x}')
-    ax1.set_title('Snapshot Scatter')
+    ax1.set_ylabel(f'Y at X = {wavelength}')
+    
     ax1.grid(True, linestyle='--', alpha=0.5)
 
-    # Fit exponential decay to snapshot scatter data
+    # Fit exponential decay to scatter data
     indices_array = np.array(indices)
     y_values_array = np.array(y_values)
 
@@ -91,7 +101,8 @@ def plot_overlay_spectra(data_dict, snapshot_x):
         ##!!! plot the fit with more points
 
         # Plot the fitted curve
-        ax1.plot(indices_array, fitted_y, color='black', linestyle='--', label='Exp. Decay Fit')
+        ax1.plot(indices_array, fitted_y, color='black', linestyle='--', label=f'Exp. Decay Fit\n\
+                 Fit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}')
         ax1.legend(fontsize='small')
 
         print(f"Fit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}")
@@ -121,13 +132,14 @@ def estimate_initial_params(indices_array, y_values_array):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Overlay spectra plots with color gradient and snapshot.')
+    parser = argparse.ArgumentParser(description='Overlay spectra plots with color gradient and Abs at a chosen wavelength.')
     parser.add_argument('folder', help='Path to folder containing ASCII files')
-    parser.add_argument('--snapshot_x', type=float, default=500, help='X value at which to take the snapshot (default: 500)')
+    parser.add_argument('--wavelength', type=float, default=default_wl, help=f'Wavelength at which to plot Abs (default: {default_wl})')
+    parser.add_argument('--legend', type=str, default='off', help='Legend for UV-Vis spectra (default: off)')
     args = parser.parse_args()
 
     data_dict = read_ascii_files_as_dict(args.folder)
-    plot_overlay_spectra(data_dict, snapshot_x=args.snapshot_x)
+    plot_overlay_spectra(data_dict, args.wavelength, args.folder, args.legend)
 
 
 if __name__ == '__main__':
