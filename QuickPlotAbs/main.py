@@ -40,10 +40,10 @@ def read_ascii_files_as_dict(folder_path):
 
 def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
     fig = plt.figure(figsize=(14, 6))
-    gs = gridspec.GridSpec(1, 2, width_ratios=[3, 1])  # Wider spectra plot
+    gs = gridspec.GridSpec(1, 5)  # Wider spectra plot
 
     # First subplot: overlay spectra
-    ax0 = fig.add_subplot(gs[0])
+    ax0 = fig.add_subplot(gs[0:3])
     ax0.set_title(f"Overlayed Spectra from: {folder}")
     
     num_files = len(data_dict)
@@ -64,8 +64,8 @@ def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
     # ax0.axvline(x=wavelength, color='gray', linestyle='--', linewidth=1.5, label=f'X={wavelength}')
     ax0.axvline(x=wavelength, color='gray', linestyle='--', linewidth=1.5)
     
-    ax0.set_xlabel("X")
-    ax0.set_ylabel("Y")
+    ax0.set_xlabel("Wavelength (nm)")
+    ax0.set_ylabel("Absorbance")
     ax0.grid(True, linestyle='--', alpha=0.5)
     
     if legend_on == "on":
@@ -74,7 +74,7 @@ def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
         pass
 
     # Second subplot: scatter plot (index vs Y-value)
-    ax1 = fig.add_subplot(gs[1])
+    ax1 = fig.add_subplot(gs[3:5])
     ax1.set_title('Scatter Plot')
     
     indices, y_values = zip(*Abs_values)
@@ -101,8 +101,7 @@ def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
         ##!!! plot the fit with more points
 
         # Plot the fitted curve
-        ax1.plot(indices_array, fitted_y, color='black', linestyle='--', label=f'Exp. Decay Fit\n\
-                 Fit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}')
+        ax1.plot(indices_array, fitted_y, color='black', linestyle='--', label=f'Exp. Decay Fit\nFit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}')
         ax1.legend(fontsize='small')
 
         print(f"Fit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}")
