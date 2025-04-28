@@ -1,0 +1,55 @@
+[build-system]										
+requires = ["setuptools>=64", "wheel"]                                                  
+build-backend = "setuptools.build_meta"                                                 
+
+[project]                                                                               
+name = "CrespiTools"                                                                    
+version = "1.0.0"                                                                       
+description = "Tools"
+license = "GPL-3.0-or-later"         							
+readme = "README.md"                                                                    
+requires-python = ">=3.10.8"
+                                                                                        
+authors = [                                                                             
+  { name = "Jorn Steen", email = "jorn.steen@kemi.uu.se" },
+  { name = "Roman Peshkov", email = "roman.peshkov@kemi.uu.se" },
+  { name = "Stefano Crespi", email = "stefano.crespi@kemi.uu.se" }
+]                                                                                       
+                                                                                        
+dependencies = [                                                                        
+  "scipy>=1.15.1",
+  "numpy>=2.2.2",
+  "pandas>=2.2.3",
+  "matplotlib>=3.10.0"
+]
+
+keywords = [
+  "science",
+  "spectroscopy",
+  "computational"
+]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Topic :: Scientific/Engineering :: Chemistry",
+  "Topic :: Scientific/Engineering :: Computational Chemistry",
+  "Topic :: Scientific/Engineering :: Spectroscopy",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+[project.urls]
+Homepage = "https://github.com/CrespiLab/tools"
+
+[project.scripts]
+quickplotabs = "QuickPlotAbs.cli:main"
+tddftplotter = "plotter_TDDFT.cli:main"
+
+[tool.setuptools]
+packages = [
+   "QuickPlotAbs",
+   "plotter_TDDFT",
+   "Robocopy_backup"
+]
+

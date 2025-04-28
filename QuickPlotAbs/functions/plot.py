@@ -11,6 +11,8 @@ import matplotlib.gridspec as gridspec
 from scipy.optimize import curve_fit
 import numpy as np
 
+default_wl = 375
+
 def exp_decay(x, a, b, c):
     return a * np.exp(-b * x) + c
 
@@ -58,7 +60,7 @@ def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
 
     ax1.scatter(indices, y_values, color=colors, s=50)
     ax1.set_xlabel('Spectrum Index')
-    ax1.set_ylabel(f'Y at X = {wavelength}')
+    ax1.set_ylabel(f'Abs at {wavelength}')
     
     ax1.grid(True, linestyle='--', alpha=0.5)
 
@@ -68,8 +70,8 @@ def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
 
     p0 = estimate_initial_params(indices_array, y_values_array)
 
-    print(f"indices_array: {indices_array}")
-    print(f"y_values_array: {y_values_array}")
+    # print(f"indices_array: {indices_array}")
+    # print(f"y_values_array: {y_values_array}")
 
     try:
         popt, pcov = curve_fit(exp_decay, indices_array, y_values_array, p0=p0)
@@ -80,7 +82,7 @@ def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
         ax1.plot(indices_array, fitted_y, color='black', linestyle='--', label=f'Exp. Decay Fit\nFit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}')
         ax1.legend(fontsize='small')
 
-        print(f"Fit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}")
+        # print(f"Fit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}")
     except RuntimeError:
         print("Warning: Exponential fit failed.")
 
