@@ -16,7 +16,7 @@ from scipy.optimize import curve_fit
 import numpy as np
 
 def exp_decay(x, a, b, c):
-    return a * np.exp(b * x) + c
+    return a * np.exp(-b * x) + c
 
 def read_ascii_files_as_dict(folder_path):
     file_pattern = os.path.join(folder_path, '*.txt')
@@ -88,6 +88,7 @@ def plot_overlay_spectra(data_dict, snapshot_x):
     try:
         popt, pcov = curve_fit(exp_decay, indices_array, y_values_array, p0=p0)
         fitted_y = exp_decay(indices_array, *popt)
+        ##!!! plot the fit with more points
 
         # Plot the fitted curve
         ax1.plot(indices_array, fitted_y, color='black', linestyle='--', label='Exp. Decay Fit')
@@ -102,17 +103,19 @@ def plot_overlay_spectra(data_dict, snapshot_x):
 
 def estimate_initial_params(indices_array, y_values_array):
     # Estimate a (amplitude)
-    a_guess = y_values_array[0]  # Starting Y-value
+    a_guess = 0-y_values_array[0]  # Starting Y-value
     
     # Estimate b (rate of decay/growth)
     # Rough guess: the change in Y per index (assuming exponential-like behavior)
     if len(indices_array) > 1:
-        b_guess = np.log(y_values_array[1] / y_values_array[0]) / (indices_array[1] - indices_array[0])
+        # b_guess = np.log(y_values_array[1] / y_values_array[0]) / (indices_array[1] - indices_array[0])
+        b_guess = 2/indices_array[-1]
     else:
         b_guess = -0.1  # Default decay if only one point (just a safe guess)
 
     # Estimate c (offset) as the minimum value in Y (or last value in some cases)
-    c_guess = np.min(y_values_array)
+    # c_guess = np.min(y_values_array)
+    c_guess = y_values_array[-1]
     
     return (a_guess, b_guess, c_guess)
 
