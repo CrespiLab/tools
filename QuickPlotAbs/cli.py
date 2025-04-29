@@ -14,6 +14,7 @@ def main():
     parser.add_argument('folder', help='Path to folder containing ASCII files')
     parser.add_argument('--wavelength', type=float, default=Plot.default_wl, help=f'Wavelength at which to plot Abs (default: {Plot.default_wl})')
     parser.add_argument('--legend', type=str, default='off', help='Legend for UV-Vis spectra (default: off)')
+    parser.add_argument('--abs8', action = 'store_true', help='Load .Abs8 files (instead of .Abs.txt or .TXT files)') # TBA
     args = parser.parse_args()
 
     data_dict = LoadData.read_ascii_files_as_dict(args.folder)
