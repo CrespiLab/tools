@@ -11,6 +11,7 @@ import os
 
 def read_ascii_files_as_dict(folder_path):
     file_pattern = os.path.join(folder_path, '*.txt')
+    # file_pattern = os.path.join(folder_path, '*.Abs.txt') ## add if necessary
     data_dict = {}
 
     for file in glob.glob(file_pattern):

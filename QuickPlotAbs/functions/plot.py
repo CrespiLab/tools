@@ -22,7 +22,7 @@ def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
 
     # First subplot: overlay spectra
     ax0 = fig.add_subplot(gs[0:3])
-    ax0.set_title(f"Overlayed Spectra from: {folder}")
+    ax0.set_title(f"Spectra from: {folder}")
     
     num_files = len(data_dict)
     color_map = cm.get_cmap('viridis', num_files)
@@ -60,7 +60,7 @@ def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
 
     ax1.scatter(indices, y_values, color=colors, s=50)
     ax1.set_xlabel('Spectrum Index')
-    ax1.set_ylabel(f'Abs at {wavelength}')
+    ax1.set_ylabel(f'Abs at {wavelength} nm')
     
     ax1.grid(True, linestyle='--', alpha=0.5)
 
@@ -75,11 +75,10 @@ def plot_overlay_spectra(data_dict, wavelength, folder, legend_on):
 
     try:
         popt, pcov = curve_fit(exp_decay, indices_array, y_values_array, p0=p0)
-        fitted_y = exp_decay(indices_array, *popt)
-        ##!!! plot the fit with more points
+        indices_morepoints = np.linspace(indices_array[0],indices_array[-1],100)
 
         # Plot the fitted curve
-        ax1.plot(indices_array, fitted_y, color='black', linestyle='--', label=f'Exp. Decay Fit\nFit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}')
+        ax1.plot(indices_morepoints, exp_decay(indices_morepoints, *popt), color='black', linestyle='--', label=f'Exp. Decay Fit\nFit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}')
         ax1.legend(fontsize='small')
 
         # print(f"Fit parameters: a={popt[0]:.3f}, b={popt[1]:.3f}, c={popt[2]:.3f}")
