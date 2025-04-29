@@ -3,25 +3,21 @@
 
 Quickly plot the absorption spectra and a scatter plot with the Abs values at a certain wavelength.
 
-# Required packages
-- pandas
-- numpy
-- scipy 1.15.1 (1.15.2 shows mkl issues)
-- matplotlib
-
 # How to run
 ## Anaconda Powershell Prompt
 **Tested successfully**
 
-Activate environment and change directory
+Make sure to activate the environment.
 ```
 conda activate tools
-cd ../tools/QuickPlotAbs
 ```
-Copy-paste folder path from Windows Explorer and execute main.py
+Use the command `quickplotabs` with the copied folder path from Windows Explorer.
 ```
-python main.py 'Path\to\folder\containing\ASCII\files\' --snapshot_x 'wavelength'
+quickplotabs Path\to\folder\containing\ASCII\files\ (--wavelength wavelength) (--legend off/[on])
 ```
+Optional arguments: 
+- --wavelength wavelength
+- --legend off/[on]
 
 ## Linux
 **Need to test**
