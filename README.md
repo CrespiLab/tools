@@ -1,4 +1,6 @@
 # tools
+**April 29<sup>th</sup>, 2025**
+
 Package containing miscellaneous useful scripts
 
 # Installation
@@ -13,11 +15,19 @@ pip install -e .
 ```
 
 # User Instructions
+Make sure to activate the environment.
+```
+conda activate tools
+```
+
 ## Tools available
 - QuickPlotAbs: use the command `quickplotabs`
-- plotter_TDDFT: to be added
+- plotter_TDDFT: TBA
 
-## QuickPlotAbs
+### QuickPlotAbs
 ```
 quickplotabs 'Path\to\folder\containing\ASCII\files\' (--wavelength 'wavelength') (--legend)
 ```
+
+### plotter_TDDFT
+TBA
