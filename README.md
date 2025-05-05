@@ -1,7 +1,9 @@
 # tools
 **April 29<sup>th</sup>, 2025**
 
-Package containing miscellaneous useful scripts
+Package containing miscellaneous useful scripts:
+- QuickPlotAbs: use the command `quickplotabs`
+- plotter_TDDFT: TBA
 
 # Installation
 ## Anaconda Powershell Prompt
@@ -20,14 +22,10 @@ Make sure to activate the environment.
 conda activate tools
 ```
 
-## Tools available
-- QuickPlotAbs: use the command `quickplotabs`
-- plotter_TDDFT: TBA
-
-### QuickPlotAbs
+## QuickPlotAbs
 ```
 quickplotabs 'Path\to\folder\containing\ASCII\files\' (--wavelength 'wavelength') (--legend)
 ```
 
-### plotter_TDDFT
+## plotter_TDDFT
 TBA
